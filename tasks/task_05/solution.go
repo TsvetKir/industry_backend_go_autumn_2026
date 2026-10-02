@@ -6,11 +6,26 @@ type Cache[K comparable, V any] struct {
 }
 
 func NewCache[K comparable, V any](capacity int) *Cache[K, V] {
-	panic("TODO: implement")
+	return &Cache[K, V]{capacity: capacity, items: make(map[K]V, capacity)}
 }
 func (c *Cache[K, V]) Get(k K) (v V, ok bool) {
-	panic("TODO: implement")
+
+	if v, ok := c.items[k]; c.capacity < len(c.items) || !ok {
+		return v, false
+	}
+
+	return c.items[k], true
 }
 func (c *Cache[K, V]) Set(k K, v V) bool {
-	panic("TODO: implement")
+	if _, ok := c.items[k]; ok {
+		c.items[k] = v
+		return true
+	}
+
+	if c.capacity <= len(c.items) {
+		return false
+	}
+
+	c.items[k] = v
+	return true
 }
